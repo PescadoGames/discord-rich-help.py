@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "discord-rich-help-py"
+version = "0.1.0"
+description = "The extension which make a rich-help command for discord.py"
+authors = ["PescadoGames <official@pescadogames.com>"]
+license = "MIT"
+readme = "README.rst"
+packages = [{include = "discord_rich_help"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
