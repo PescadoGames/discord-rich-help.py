@@ -24,4 +24,17 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from .help import *
+from typing import Dict, Final
+
+__all__ = (
+    'text',
+)
+
+
+text: Final[Dict[str, str]] = {
+    'default_help_doc': 'Show the help message.',
+    'cmd': 'command',
+    'subcmd': 'sub_command',
+    'cmd_doc': 'A commamd name to show the help message.',
+    'subcmd_doc': 'A sub command name to show the help message.'
+}
