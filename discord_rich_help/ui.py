@@ -116,4 +116,4 @@ class HelpCommandView(View):
             setattr(item, 'disabled', True)
         self.timeout = 0
 
-        await self.message.edit(embeds=self.message.embeds, view=self)
+        await self.message.edit(view=self)
