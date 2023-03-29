@@ -36,5 +36,6 @@ text: Final[Dict[str, str]] = {
     'cmd': 'command',
     'subcmd': 'sub_command',
     'cmd_doc': 'A commamd name to show the help message.',
-    'subcmd_doc': 'A sub command name to show the help message.'
+    'subcmd_doc': 'A sub command name to show the help message.',
+    'help_title': 'Command Help'
 }

@@ -32,6 +32,7 @@ from discord.app_commands import command, describe, locale_str, rename
 from discord.ext.commands import Cog, Context, Group, HelpCommand
 
 from .text import text
+from .ui import HelpCommandView
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -56,6 +57,8 @@ class RichHelpCommand(HelpCommand, Cog):
     __slots__ = (
         '_last_member',
         'embed_color',
+        'current_page',
+        'pages',
     )
 
     def __init__(self, *, color: Union[Color, int] = Color.blurple()) -> None:
@@ -65,6 +68,8 @@ class RichHelpCommand(HelpCommand, Cog):
         """
         super().__init__(command_attrs={'help': 'Show this message'})
         self._last_member = None
+        self.current_page: int
+        self.pages: List[List[Command[Any, Any, Any]]]
         self.embed_color: Union[Color, int] = color
 
     def _add_to_bot(self, bot: BotBase) -> None:
@@ -86,18 +91,79 @@ class RichHelpCommand(HelpCommand, Cog):
         else:
             return False
 
-    async def send_bot_help(self, mapping: Mapping[Optional[Cog], List[Command]]) -> None:
+    def _split_list(self, base: List[Any], length: int) -> List[Any]:
+        """
+
+        .. versionadded:: 0.1
+        """
+        for idx in range(0, len(base), length):
+            yield base[idx : idx + length]
+
+    def get_pages(self, commands: List[Command[Any, Any, Any]]) -> List[Command[Any, Any, Any]]:
+        """
+
+        .. versionadded:: 0.1
+        """
+        return list(self._split_list(commands, 10))
+
+    async def _get_commands(self) -> List[Command[Any, Any, Any]]:
         """|coro|
 
         .. versionadded:: 0.1
         """
+        if self.is_interaction_based():
+            return await self.filter_commands(self.context.bot.tree.get_commands(), sort=True)
+
+        else:
+            return await self.filter_commands(self.context.bot.commands, sort=True)
+
+    async def switch_page(self, id: ItemId, interaction: Interaction, button: Button, view: HelpCommandView) -> None:
+        """
+
+        .. versionadded:: 0.1
+        """
+        page_length: int = len(self.pages)
+
+        if id == 'first':
+            self.current_page = 1
+
+        elif id == 'back':
+            self.current_page = self.current_page - 1
+
+        elif id == 'next':
+            self.current_page = self.current_page + 1
+
+        elif id == 'last':
+            self.current_page = page_length
+
+        if self.current_page == page_length:
+            setattr(view.first_button, 'disabled', False)
+            setattr(view.back_button, 'disabled', False)
+            setattr(view.next_button, 'disabled', True)
+            setattr(view.last_button, 'disabled', True)
+
+        elif self.current_page == 1:
+            setattr(view.first_button, 'disabled', True)
+            setattr(view.back_button, 'disabled', True)
+            if not page_length == 1:
+                setattr(view.next_button, 'disabled', False)
+                setattr(view.last_button, 'disabled', False)
+
+        new_page: Embed = self.get_bot_help()
+        await interaction.response.edit_message(embed=new_page, view=view)
+
+    def get_bot_help(self) -> Embed:
+        """
+
+        .. versionadded:: 0.1
+        """
         prefix: Optional[str] = self.context.prefix
-        bot_help: Embed = Embed(title='Command help', color=self.embed_color)
-        filtered: List[Command[Any, Any, Any]]
+        page_length: int = len(self.pages)
+        bot_help: Embed = Embed(title=text['help_title'], color=self.embed_color)
+        bot_help.set_footer(text=f'Page {self.current_page}/{page_length}')
 
         if self.is_interaction_based():
-            filtered = await self.filter_commands(self.context.bot.tree.get_commands(), sort=True)
-            for command in filtered:
+            for command in self.pages[self.current_page - 1]:
                 params = [f'[{p.display_name}]' for p in command.parameters]
                 param_str = ' '.join(params) if params else ''
                 bot_help.add_field(
@@ -107,15 +173,28 @@ class RichHelpCommand(HelpCommand, Cog):
                 )
 
         else:
-            filtered = await self.filter_commands(self.context.bot.commands, sort=True)
-            for command in filtered:
+            for command in self.pages[self.current_page - 1]:
                 bot_help.add_field(
                     name=f'{prefix}{command.name} {command.signature}',
                     value=command.short_doc,
                     inline=False
                 )
 
-        await self.get_destination().send(embed=bot_help)
+        return bot_help
+
+    async def send_bot_help(self, mapping: Mapping[Optional[Cog], List[Command]]) -> None:
+        """|coro|
+
+        .. versionadded:: 0.1
+        """
+        commands: List[Command[Any, Any, Any]] = await self._get_commands()
+        self.pages = self.get_pages(commands)
+        self.current_page = 1
+
+        bot_help: Embed = self.get_bot_help()
+        view: HelpCommandView = HelpCommandView(page_length=len(self.pages), button_callback=self.switch_page)
+
+        view.message = await self.get_destination().send(embed=bot_help, view=view)
 
     async def send_cog_help(self, cog: Cog) -> None:
         """|coro|
@@ -136,14 +215,20 @@ class RichHelpCommand(HelpCommand, Cog):
             color=self.embed_color
         )
         filtered: List[Command[Any, Any, Any]] = await self.filter_commands(group.commands, sort=True)
-        for child in filtered:
+        self.pages = self.get_pages(filtered)
+        self.current_page = 1
+        length: int = len(pages)
+        group_help.set_footer(text=f'Page 1/{length}')
+        for child in pages[0]:
             group_help.add_field(
                 name=f"{prefix}{child.qualified_name} {group.signature}",
                 value=child.short_doc,
                 inline=False
             )
 
-        await self.get_destination().send(embed=group_help)
+        view: HelpCommandView = HelpCommandView(page_length=length, button_callback=self.switch_page)
+
+        view.message = await self.get_destination().send(embed=group_help, view=view)
 
     async def send_command_help(self, command: Command) -> None:
         """|coro|
