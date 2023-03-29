@@ -48,10 +48,19 @@ __all__ = (
 
 
 class RichHelpCommand(HelpCommand, Cog):
-    """
-    The class for a rich help command.
+    """A class for a rich help command.
 
     .. versionadded:: 0.1
+
+    Parameters
+    -----------
+    embed_color: Union[:class:`Color`, :class:`int`]
+        An embed color for help commands.
+
+    Attributes
+    -----------
+    embed_color: Union[:class:`Color`, :class:`int`]
+        An embed color for help commands.
     """
 
     __slots__ = (
@@ -61,29 +70,38 @@ class RichHelpCommand(HelpCommand, Cog):
         'pages',
     )
 
-    def __init__(self, *, color: Union[Color, int] = Color.blurple()) -> None:
-        """
-
-        .. versionadded:: 0.1
-        """
+    def __init__(self, *, embed_color: Union[Color, int] = Color.blurple()) -> None:
         super().__init__(command_attrs={'help': 'Show this message'})
         self._last_member = None
         self.current_page: int
         self.pages: List[List[Command[Any, Any, Any]]]
-        self.embed_color: Union[Color, int] = color
+        self.embed_color: Union[Color, int] = embed_color
 
     def _add_to_bot(self, bot: BotBase) -> None:
+        """Add help commands to `bot` .
+
+        .. versionadded:: 0.1
+        """
         super()._add_to_bot(bot)
         asyncio.run(bot.add_cog(self))
 
     def _remove_from_bot(self, bot: BotBase) -> None:
+        """Remove help commands from `bot` .
+
+        .. versionadded:: 0.1
+        """
         super()._remove_from_bot(bot)
         asyncio.run(bot.remove_cog(__class__.__name__))
 
     def is_interaction_based(self) -> bool:
-        """
+        """Check if a command is a message command or a slash command.
 
         .. versionadded:: 0.1
+
+        Returns
+        --------
+        :class:`bool`
+            Return True if a command is slash command.
         """
         if self.context.interaction is not None:
             return True
@@ -92,35 +110,54 @@ class RichHelpCommand(HelpCommand, Cog):
             return False
 
     def _split_list(self, base: List[Any], length: int) -> List[Any]:
-        """
+        """Split a list.
 
         .. versionadded:: 0.1
+
+        Parameters
+        -----------
+        base: List[Any]
+            A list to split.
+        length: :class:`int`
+            A max length of each list.
+
+        Yields
+        -------
+        List[Any]
+            A split list.
         """
         for idx in range(0, len(base), length):
             yield base[idx : idx + length]
 
-    def get_pages(self, commands: List[Command[Any, Any, Any]]) -> List[Command[Any, Any, Any]]:
-        """
+    def get_pages(self, commands: List[Command[Any, Any, Any]]) -> List[List[Command[Any, Any, Any]]]:
+        """Split a list of commands to display.
 
         .. versionadded:: 0.1
+
+        Parameters
+        -----------
+        commands: List[:class:`Command`]
+            A list of commands
+
+        Returns
+        --------
+        List[List[:class:`Command`]]
         """
         return list(self._split_list(commands, 10))
 
-    async def _get_commands(self) -> List[Command[Any, Any, Any]]:
-        """|coro|
-
-        .. versionadded:: 0.1
-        """
-        if self.is_interaction_based():
-            return await self.filter_commands(self.context.bot.tree.get_commands(), sort=True)
-
-        else:
-            return await self.filter_commands(self.context.bot.commands, sort=True)
-
     async def switch_page(self, id: ItemId, interaction: Interaction, button: Button, view: HelpCommandView) -> None:
-        """
+        """Switch a page of help command embed.
+
+        This function must be given as an argument of :class:`HelpCommandView` .
 
         .. versionadded:: 0.1
+
+        Parameters
+        -----------
+        id: :class:`ItemId`
+            A type of button or select menu.
+        interaction: :class:`Interaction`
+        view: :class:`HelpCommandView`
         """
         page_length: int = len(self.pages)
 
@@ -153,9 +190,14 @@ class RichHelpCommand(HelpCommand, Cog):
         await interaction.response.edit_message(embed=new_page, view=view)
 
     def get_bot_help(self) -> Embed:
-        """
+        """Make an embed of bot help command.
 
         .. versionadded:: 0.1
+
+        Returns
+        --------
+        :class:`Embed`
+            An embed of bot help command.
         """
         prefix: Optional[str] = self.context.prefix
         page_length: int = len(self.pages)
@@ -185,9 +227,18 @@ class RichHelpCommand(HelpCommand, Cog):
     async def send_bot_help(self, mapping: Mapping[Optional[Cog], List[Command]]) -> None:
         """|coro|
 
+        Send a bot help.
+        This send a default page of help.
+
         .. versionadded:: 0.1
         """
-        commands: List[Command[Any, Any, Any]] = await self._get_commands()
+        filtered: List[Command[Any, Any, Any]]
+        if self.is_interaction_based():
+            filtered = await self.filter_commands(self.context.bot.tree.get_commands(), sort=True)
+
+        else:
+            filtered = await self.filter_commands(self.context.bot.commands, sort=True)
+
         self.pages = self.get_pages(commands)
         self.current_page = 1
 
@@ -199,12 +250,16 @@ class RichHelpCommand(HelpCommand, Cog):
     async def send_cog_help(self, cog: Cog) -> None:
         """|coro|
 
+        This will send "Command not found" error message.
+
         .. versionadded:: 0.1
         """
         await self.send_error_message(self.command_not_found(cog.qualified_name))
 
     async def send_group_help(self, group: Group) -> None:
         """|coro|
+
+        Send a group help message.
 
         .. versionadded:: 0.1
         """
@@ -233,6 +288,8 @@ class RichHelpCommand(HelpCommand, Cog):
     async def send_command_help(self, command: Command) -> None:
         """|coro|
 
+        Send a command help message.
+
         .. versionadded:: 0.1
         """
         prefix: Optional[str] = self.context.prefix
@@ -258,9 +315,21 @@ class RichHelpCommand(HelpCommand, Cog):
             *,
             sort: Optional[bool] = False
     ) -> List[Command[Any, Any, Any]]:
-        """
+        """|coro|
+
+        Filter or sort commands.
+
+        If a command is message command, call :meth:`HelpCommand.filter_commands` .
+        If it is slash command, do nothing or just sort commands.
 
         .. versionadded:: 0.1
+
+        Parameters
+        -----------
+        commands: List[:class:`Command`]
+            A list of commands.
+        sort: Optional[:class:`bool`]
+            Whether to sort the list of commands.
         """
         try:
             return await super().filter_commands(commands, sort=sort)
@@ -274,30 +343,69 @@ class RichHelpCommand(HelpCommand, Cog):
                 return commands
 
     def get_destination(self) -> Context[Any]:
-        """
+        """Return `.context` .
+
+        This is implemented only for compatibility.
 
         .. versionadded:: 0.1
+
+        Returns
+        --------
+        :class:`Context`
         """
         return self.context
 
     def command_not_found(self, string: str) -> str:
         """|maybecoro|
 
+        Return an error message for when the command is not found.
+
         .. versionadded:: 0.1
+
+        Parameters
+        -----------
+        string: :class:`str`
+            A command name which is not found.
+
+        Returns
+        --------
+        :class:`str`
+            An error message.
         """
         return super().command_not_found(string)
 
     def subcommand_not_found(self, command: Command[Any, Any, Any], string: str) -> str:
         """|maybecoro|
 
+        Return an error message for when the sub command is not found.
+
         .. versionadded:: 0.1
+
+        Parameters
+        -----------
+        command: :class:`Command`
+            A parent command.
+        string: :class:`str`
+            A sub command which is not found.
+
+        Returns
+        --------
+        :class:`str`
+            An error message.
         """
         return super().subcommand_not_found(command, string)
 
     async def send_error_message(self, error: str) -> None:
         """|coro|
 
+        Send an error message.
+
         .. versionadded:: 0.1
+
+        Parameters
+        -----------
+        error: :class:`str`
+            An error message.
         """
         err: Embed = Embed(title=error, color=Color.red())
         await self.get_destination().send(embed=err)
@@ -309,6 +417,21 @@ class RichHelpCommand(HelpCommand, Cog):
     )
     @rename(cmd=locale_str(text['cmd']), subcmd=locale_str(text['subcmd']))
     async def slash_help(self, interaction: Interaction, cmd: Optional[str] = None, subcmd: Optional[str] = None) -> None:
+        """|coro|
+
+        A help command entry for slash command.
+        This emulates the behavior of the help command on message commands.
+
+        .. versionadded:: 0.1
+
+        Parameters
+        -----------
+        interaction: :class:`Interaction`
+        cmd: Optional[:class:`str`]
+            A command name.
+        subcmd: Optional[:class:`str`]
+            A sub command name.
+        """
         self.context = await Context.from_interaction(interaction)
         param: Optional[str]
 

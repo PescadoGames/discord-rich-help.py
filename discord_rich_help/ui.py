@@ -36,7 +36,7 @@ if TYPE_CHECKING:
     from discord.ui import Button
 
     ItemId: TypeAlias = Literal['category', 'command', 'first', 'back', 'next', 'last']
-    F: TypeAlias = Callable[[ItemId, Interaction, Button, HelpCommandView], Awaitable[Any]]
+    ButtonCallback: TypeAlias = Callable[[ItemId, Interaction, Button, HelpCommandView], Awaitable[Any]]
     HelpType: TypeAlias = Literal['bot', 'category', 'command', 'group']
 
 __all__ = (
@@ -45,9 +45,22 @@ __all__ = (
 
 
 class HelpCommandView(View):
-    """
+    """A class for UI of help commands.
 
     .. versionadded:: 0.1
+
+    Parameters
+    -----------
+    page_length: :class:`int`
+        The length of help command pages.
+    button_callback: :class:`ButtonCallback`
+        A callback function of button.
+
+    Attributes
+    -----------
+    message: :class:`Message`
+        A :class:`Message` of sent help command.
+        This attribute must be set after a help message has sent.
     """
     __slots__ = (
         '__button_callback',
@@ -58,12 +71,8 @@ class HelpCommandView(View):
             self,
             *,
             page_length: int,
-            button_callback: F,
+            button_callback: ButtonCallback,
     ) -> None:
-        """
-
-        .. versionadded:: 0.1
-        """
         super().__init__()
         self.message: Optional[Message] = None
         self.__button_callback: F = button_callback
@@ -74,7 +83,7 @@ class HelpCommandView(View):
 
     @button(style=ButtonStyle.secondary, label='≪', disabled=True)
     async def first_button(self, interaction: Interaction, button: Button) -> None:
-        """
+        """Move to the first page of help messages.
 
         .. versionadded:: 0.1
         """
@@ -82,7 +91,7 @@ class HelpCommandView(View):
 
     @button(style=ButtonStyle.primary, label='Back', disabled=True)
     async def back_button(self, interaction: Interaction, button: Button) -> None:
-        """
+        """Move to the previous page of help messages.
 
         .. versionadded:: 0.1
         """
@@ -90,7 +99,7 @@ class HelpCommandView(View):
 
     @button(style=ButtonStyle.primary, label='Next')
     async def next_button(self, interaction: Interaction, button: Button) -> None:
-        """
+        """Move to the next page of help messages.
 
         .. versionadded:: 0.1
         """
@@ -98,16 +107,20 @@ class HelpCommandView(View):
 
     @button(style=ButtonStyle.secondary, label='≫')
     async def last_button(self, interaction: Interaction, button: Button) -> None:
-        """
+        """Move to the last page of help messages.
 
         .. versionadded:: 0.1
         """
         await self.__button_callback('last', interaction, button, self)
 
     async def on_timeout(self) -> None:
-        """
+        """Disable all button and menu when the interaction times out.
 
         .. versionadded:: 0.1
+
+        Notes
+        ------
+        This function need `.message` .
         """
         if self.message is None:
             raise ValueError('"message" is not defined')
