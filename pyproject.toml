@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "discord-rich-help-py"
+name = "discord-rich-help.py"
 version = "0.1.0-beta"
 description = "The extension which make a rich-help command for discord.py"
 license = "MIT"
 authors = ["PescadoGames <official@pescadogames.com>"]
-maintainers = ["Awayume <git@awayume.jp>"]
+maintainers = ["Awayume <dev@awayume.jp>"]
 readme = "README.rst"
 repository = "https://github.com/PescadoGames/discord-rich-help.py"
 documentation = "https://github.com/PescadoGames/discord-rich-help.py/wiki"
@@ -36,8 +36,11 @@ flake8-docstrings = { version = "^1.7.0", optional = true }
 flake8-import-order = { version = "^0.18.2", optional = true }
 flake8-print = { version = "^5.0.0", optional = true }
 flake8-quotes = { version = "^3.3.2", optional = true }
+pyproject-flake8 = { version = "^6.0.0", optional = true }
 mypy = { version = "^1.1.1", optional = true }
 mypy-extensions = { version = "^1.0.0", optional = true }
+pytest = { version = "^7.2.2", optional = true }
+pytest-mock = { version = "^3.10.0", optional = true }
 
 [tool.poetry.extras]
 test = [
@@ -48,10 +51,30 @@ test = [
     "flake8-import-order",
     "flake8-print",
     "flake8-quotes",
+    "pyproject-flake8",
     "mypy",
     "mypy-extensions",
+    "pytest",
+    "pytest-mock",
 ]
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.flake8]
+max-line-length = 125
+extend-ignore = "D400,W503"
+max-complexity = 10
+
+[tool.mypy]
+implicit_reexport = true
+warn_return_any = true
+warn_unused_configs = true
+warn_unreachable = true
+strict_optional = true
+ignore_missing_imports = true
+disallow_any_generics = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+check_untyped_defs = true
