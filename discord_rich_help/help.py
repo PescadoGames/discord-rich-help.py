@@ -267,7 +267,7 @@ class RichHelpCommand(HelpCommand, Cog):
         """
         prefix: Optional[str] = self.context.prefix
         group_help: Embed = Embed(
-            title=f"{prefix}{group.qualified_name} {group.signature}",
+            title=f'{prefix}{group.qualified_name} {group.signature}',
             description=group.help,
             color=self.embed_color
         )
@@ -278,7 +278,7 @@ class RichHelpCommand(HelpCommand, Cog):
         group_help.set_footer(text=f'Page 1/{length}')
         for child in self.pages[0]:
             group_help.add_field(
-                name=f"{prefix}{child.qualified_name} {group.signature}",
+                name=f'{prefix}{child.qualified_name} {group.signature}',
                 value=child.short_doc,
                 inline=False
             )
@@ -296,7 +296,7 @@ class RichHelpCommand(HelpCommand, Cog):
         """
         prefix: Optional[str] = self.context.prefix
         cmd_help: Embed = Embed(
-            title=f"{prefix}{command.qualified_name} {command.signature}",
+            title=f'{prefix}{command.qualified_name} {command.signature}',
             description=command.help,
             color=self.embed_color
         )
@@ -304,7 +304,7 @@ class RichHelpCommand(HelpCommand, Cog):
             filtered: List[Command[Any, Any, Any]] = await self.filter_commands(command.commands, sort=True)
             for child in filtered:
                 cmd_help.add_field(
-                    name=f"{prefix}{child.qualified_name} {child.signature}",
+                    name=f'{prefix}{child.qualified_name} {child.signature}',
                     value=child.short_doc,
                     inline=False
                 )
