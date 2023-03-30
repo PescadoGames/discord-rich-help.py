@@ -75,7 +75,7 @@ class HelpCommandView(View):
     ) -> None:
         super().__init__()
         self.message: Optional[Message] = None
-        self.__button_callback: F = button_callback
+        self.__button_callback: ButtonCallback = button_callback
 
         if page_length == 1:
             setattr(self.next_button, 'disabled', True)

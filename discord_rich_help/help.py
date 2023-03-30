@@ -241,7 +241,7 @@ class RichHelpCommand(HelpCommand, Cog):
         else:
             filtered = await self.filter_commands(self.context.bot.commands, sort=True)
 
-        self.pages = self.get_pages(commands)
+        self.pages = self.get_pages(filtered)
         self.current_page = 1
 
         bot_help: Embed = self.get_bot_help()
@@ -274,9 +274,9 @@ class RichHelpCommand(HelpCommand, Cog):
         filtered: List[Command[Any, Any, Any]] = await self.filter_commands(group.commands, sort=True)
         self.pages = self.get_pages(filtered)
         self.current_page = 1
-        length: int = len(pages)
+        length: int = len(self.pages)
         group_help.set_footer(text=f'Page 1/{length}')
-        for child in pages[0]:
+        for child in self.pages[0]:
             group_help.add_field(
                 name=f"{prefix}{child.qualified_name} {group.signature}",
                 value=child.short_doc,
