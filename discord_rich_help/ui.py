@@ -88,7 +88,7 @@ class HelpCommandView(View):
 
         .. versionadded:: 0.1
         """
-        await self.__button_callback('first', interaction, button, self)
+        await self.__button_callback('first', interaction, button, self)  # type: ignore
 
     @button(style=ButtonStyle.primary, label='Back', disabled=True)
     async def back_button(self, interaction: Interaction, button: Button[View]) -> None:
@@ -96,7 +96,7 @@ class HelpCommandView(View):
 
         .. versionadded:: 0.1
         """
-        await self.__button_callback('back', interaction, button, self)
+        await self.__button_callback('back', interaction, button, self)  # type: ignore
 
     @button(style=ButtonStyle.primary, label='Next')
     async def next_button(self, interaction: Interaction, button: Button[View]) -> None:
@@ -104,7 +104,7 @@ class HelpCommandView(View):
 
         .. versionadded:: 0.1
         """
-        await self.__button_callback('next', interaction, button, self)
+        await self.__button_callback('next', interaction, button, self)  # type: ignore
 
     @button(style=ButtonStyle.secondary, label='≫')
     async def last_button(self, interaction: Interaction, button: Button[View]) -> None:
@@ -112,7 +112,7 @@ class HelpCommandView(View):
 
         .. versionadded:: 0.1
         """
-        await self.__button_callback('last', interaction, button, self)
+        await self.__button_callback('last', interaction, button, self)  # type: ignore
 
     async def on_timeout(self) -> None:
         """Disable all button and menu when the interaction times out.
