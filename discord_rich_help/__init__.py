@@ -22,6 +22,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from __future__ import annotations
+__title__ = 'discord_rich_help'
+__author__ = 'PescadoGames'
+__license__ = 'MIT'
+__copyright__ = 'Copyright (c) 2023 PescadoGames'
+__version__ = '0.1.0-beta'
+
+from typing import NamedTuple, Literal
 
 from .help import *
+
+
+class VersionInfo(NamedTuple):
+    major: int
+    minor: int
+    micro: int
+    releaseLevel: Literal['alpha', 'beta', 'candidate', 'final']
+    serial: int
+
+
+version_info: VersionInfo = VersionInfo(major=0, minor=1, micro=0, releaseLevel='beta', serial=0)
+
+del NamedTuple, Literal, VersionInfo

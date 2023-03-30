@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "discord-rich-help-py"
-version = "0.1.0-alpha"
+version = "0.1.0-beta"
 description = "The extension which make a rich-help command for discord.py"
 license = "MIT"
 authors = ["PescadoGames <official@pescadogames.com>"]
