@@ -28,13 +28,15 @@ import asyncio
 from typing import Optional, TYPE_CHECKING
 
 from discord import Color, Embed
-from discord.app_commands import command, describe, locale_str, rename
+from discord.app_commands import describe, locale_str, rename
+from discord.app_commands import command as slash_command
 from discord.ext.commands import Cog, Context, Group, HelpCommand
 
 from .text import text
 from .ui import HelpCommandView
 
 if TYPE_CHECKING:
+    from discord.abc import MessageableChannel
     from collections.abc import Mapping
     from typing import Any, List, Union
 
@@ -412,7 +414,7 @@ class RichHelpCommand(HelpCommand, Cog):
         err: Embed = Embed(title=error, color=Color.red())
         await self.get_destination().send(embed=err)
 
-    @command(name='help', description=locale_str(text['default_help_doc']))
+    @slash_command(name='help', description=locale_str(text['default_help_doc']))
     @describe(
         cmd=locale_str(text['cmd_doc']),
         subcmd=locale_str(text['subcmd_doc'])
