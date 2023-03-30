@@ -62,6 +62,7 @@ class HelpCommandView(View):
         A :class:`Message` of sent help command.
         This attribute must be set after a help message has sent.
     """
+
     __slots__ = (
         '__button_callback',
         'message',
