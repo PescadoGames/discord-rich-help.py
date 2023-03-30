@@ -37,7 +37,7 @@ if TYPE_CHECKING:
     from discord.ui import Button
 
     ItemId: TypeAlias = Literal['category', 'command', 'first', 'back', 'next', 'last']
-    ButtonCallback: TypeAlias = Callable[[ItemId, Interaction, Button, HelpCommandView], Awaitable[Any]]
+    ButtonCallback: TypeAlias = Callable[[ItemId, Interaction, Button[View], HelpCommandView], Awaitable[Any]]
     HelpType: TypeAlias = Literal['bot', 'category', 'command', 'group']
 
 __all__ = (
@@ -84,7 +84,7 @@ class HelpCommandView(View):
             setattr(self.last_button, 'disabled', True)
 
     @button(style=ButtonStyle.secondary, label='≪', disabled=True)
-    async def first_button(self, interaction: Interaction, button: Button) -> None:
+    async def first_button(self, interaction: Interaction, button: Button[View]) -> None:
         """Move to the first page of help messages.
 
         .. versionadded:: 0.1
@@ -92,7 +92,7 @@ class HelpCommandView(View):
         await self.__button_callback('first', interaction, button, self)
 
     @button(style=ButtonStyle.primary, label='Back', disabled=True)
-    async def back_button(self, interaction: Interaction, button: Button) -> None:
+    async def back_button(self, interaction: Interaction, button: Button[View]) -> None:
         """Move to the previous page of help messages.
 
         .. versionadded:: 0.1
@@ -100,7 +100,7 @@ class HelpCommandView(View):
         await self.__button_callback('back', interaction, button, self)
 
     @button(style=ButtonStyle.primary, label='Next')
-    async def next_button(self, interaction: Interaction, button: Button) -> None:
+    async def next_button(self, interaction: Interaction, button: Button[View]) -> None:
         """Move to the next page of help messages.
 
         .. versionadded:: 0.1
@@ -108,7 +108,7 @@ class HelpCommandView(View):
         await self.__button_callback('next', interaction, button, self)
 
     @button(style=ButtonStyle.secondary, label='≫')
-    async def last_button(self, interaction: Interaction, button: Button) -> None:
+    async def last_button(self, interaction: Interaction, button: Button[View]) -> None:
         """Move to the last page of help messages.
 
         .. versionadded:: 0.1

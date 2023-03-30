@@ -40,7 +40,7 @@ if TYPE_CHECKING:
     from typing import Any, List, Union
 
     from discord import Interaction
-    from discord.ui import Button
+    from discord.ui import Button, View
     from discord.ext.commands import BotBase, Command
 
     from .ui import ItemId
@@ -148,7 +148,7 @@ class RichHelpCommand(HelpCommand, Cog):
         """
         return list(self._split_list(commands, 10))
 
-    async def switch_page(self, id: ItemId, interaction: Interaction, button: Button, view: HelpCommandView) -> None:
+    async def switch_page(self, id: ItemId, interaction: Interaction, button: Button[View], view: HelpCommandView) -> None:
         """Switch a page of help command embed.
 
         This function must be given as an argument of :class:`HelpCommandView` .
