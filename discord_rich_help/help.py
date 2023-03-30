@@ -41,7 +41,7 @@ if TYPE_CHECKING:
 
     from discord import Interaction
     from discord.ui import Button, View
-    from discord.ext.commands import BotBase, Command
+    from discord.ext.commands import Bot, Command
 
     from .ui import ItemId
 
@@ -80,7 +80,7 @@ class RichHelpCommand(HelpCommand, Cog):
         self.pages: List[List[Command[Any, Any, Any]]]
         self.embed_color: Union[Color, int] = embed_color
 
-    def _add_to_bot(self, bot: BotBase) -> None:
+    def _add_to_bot(self, bot: Bot) -> None:
         """Add help commands to `bot` .
 
         .. versionadded:: 0.1
@@ -88,7 +88,7 @@ class RichHelpCommand(HelpCommand, Cog):
         super()._add_to_bot(bot)
         asyncio.run(bot.add_cog(self))
 
-    def _remove_from_bot(self, bot: BotBase) -> None:
+    def _remove_from_bot(self, bot: Bot) -> None:
         """Remove help commands from `bot` .
 
         .. versionadded:: 0.1
