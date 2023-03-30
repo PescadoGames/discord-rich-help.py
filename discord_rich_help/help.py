@@ -28,15 +28,14 @@ import asyncio
 from typing import Optional, TYPE_CHECKING
 
 from discord import Color, Embed
-from discord.app_commands import describe, locale_str, rename
 from discord.app_commands import command as slash_command
+from discord.app_commands import describe, locale_str, rename
 from discord.ext.commands import Cog, Context, Group, HelpCommand
 
 from .text import text
 from .ui import HelpCommandView
 
 if TYPE_CHECKING:
-    from discord.abc import MessageableChannel
     from collections.abc import Mapping
     from typing import Any, List, Union
 
