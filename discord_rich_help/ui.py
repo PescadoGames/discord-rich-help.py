@@ -31,13 +31,12 @@ from discord.ui import View, button
 
 if TYPE_CHECKING:
     from typing import Any, Awaitable, Callable, Literal, Optional
-    from typing_extensions import TypeAlias
+    from typing_extensions import Self, TypeAlias
 
     from discord import Interaction, Message
     from discord.ui import Button
 
     ItemId: TypeAlias = Literal['category', 'command', 'first', 'back', 'next', 'last']
-    ButtonCallback: TypeAlias = Callable[[ItemId, Interaction, Button[View], HelpCommandView], Awaitable[Any]]
     HelpType: TypeAlias = Literal['bot', 'category', 'command', 'group']
 
 __all__ = (
@@ -54,7 +53,7 @@ class HelpCommandView(View):
     -----------
     page_length: :class:`int`
         The length of help command pages.
-    button_callback: :class:`ButtonCallback`
+    button_callback: Callable[[:class:`ItemId`, :class:`Interaction`, :class:`Button`, :class:`Self`], Awaitable[Any]]
         A callback function of button.
 
     Attributes
@@ -73,11 +72,11 @@ class HelpCommandView(View):
             self,
             *,
             page_length: int,
-            button_callback: ButtonCallback,
+            button_callback: Callable[[ItemId, Interaction, Button[View], Self], Awaitable[Any]],
     ) -> None:
         super().__init__()
         self.message: Optional[Message] = None
-        self.__button_callback: ButtonCallback = button_callback
+        self.__button_callback: Callable[[ItemId, Interaction, Button[View], Self], Awaitable[Any]] = button_callback
 
         if page_length == 1:
             setattr(self.next_button, 'disabled', True)
