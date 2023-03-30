@@ -39,7 +39,10 @@ if TYPE_CHECKING:
     from typing import Any, List, Union
 
     from discord import Interaction
+    from discord.ui import Button
     from discord.ext.commands import BotBase, Command
+
+    from .ui import ItemId
 
 __all__ = (
     'RichHelpCommand',

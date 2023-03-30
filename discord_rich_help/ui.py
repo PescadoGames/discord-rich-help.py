@@ -30,7 +30,7 @@ from discord import ButtonStyle, Message
 from discord.ui import View, button
 
 if TYPE_CHECKING:
-    from typing import Any, Awaitable, Callable, TypeAlias
+    from typing import Any, Awaitable, Callable, Literal, Optional, TypeAlias
 
     from discord import Interaction, Message
     from discord.ui import Button
