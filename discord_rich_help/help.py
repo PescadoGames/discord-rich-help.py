@@ -36,10 +36,9 @@ from .ui import HelpCommandView
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
-    from typing import Any, List, Tuple, Union
+    from typing import Any, List, Union
 
-    from discord import Interaction, Locale
-    from discord.abc import MessageableChannel
+    from discord import Interaction
     from discord.ext.commands import BotBase, Command
 
 __all__ = (

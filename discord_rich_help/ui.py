@@ -24,13 +24,13 @@ SOFTWARE.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 from discord import ButtonStyle, Message
 from discord.ui import View, button
 
 if TYPE_CHECKING:
-    from typing import Any, Awaitable, Callable, Dict, TypeAlias
+    from typing import Any, Awaitable, Callable, TypeAlias
 
     from discord import Interaction, Message
     from discord.ui import Button
