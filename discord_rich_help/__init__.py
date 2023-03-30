@@ -22,13 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+# flake8: noqa
+
 __title__ = 'discord_rich_help'
 __author__ = 'PescadoGames'
 __license__ = 'MIT'
 __copyright__ = 'Copyright (c) 2023 PescadoGames'
 __version__ = '0.1.0-beta'
 
-from typing import NamedTuple, Literal
+from typing import Literal, NamedTuple
 
 from .help import *
 
