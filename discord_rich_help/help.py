@@ -94,7 +94,7 @@ class RichHelpCommand(HelpCommand, Cog):
         .. versionadded:: 0.1
         """
         super()._remove_from_bot(bot)
-        asyncio.run(bot.remove_cog(__class__.__name__))
+        asyncio.run(bot.remove_cog(__class__.__name__))  # type: ignore
 
     def is_interaction_based(self) -> bool:
         """Check if a command is a message command or a slash command.
