@@ -26,7 +26,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from discord import ButtonStyle, Message
+from discord import ButtonStyle
 from discord.ui import View, button
 
 if TYPE_CHECKING:
