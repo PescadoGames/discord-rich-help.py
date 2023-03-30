@@ -126,7 +126,7 @@ class RichHelpCommand(HelpCommand, Cog):
             A split list.
         """
         for idx in range(0, len(base), length):
-            yield base[idx : idx + length]
+            yield base[idx:idx + length]
 
     def get_pages(self, commands: List[Command[Any, Any, Any]]) -> List[List[Command[Any, Any, Any]]]:
         """Split a list of commands to display.
