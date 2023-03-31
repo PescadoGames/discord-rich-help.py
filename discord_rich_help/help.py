@@ -215,7 +215,7 @@ class RichHelpCommand(HelpCommand, Cog):
 
         if self.is_interaction_based():
             for command in self.pages[self.current_page - 1]:
-                params = [f'[{p.display_name}]' for p in command.parameters]
+                params = [f'[{p.display_name}]' for p in command.parameters]  # type: ignore
                 param_str = ' '.join(params) if params else ''
                 bot_help.add_field(
                     name=f'{prefix}{command.name} {param_str}',
