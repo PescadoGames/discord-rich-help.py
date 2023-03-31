@@ -28,6 +28,7 @@ import asyncio
 from typing import Optional, TYPE_CHECKING
 
 from discord import Color, Embed
+
 from discord.app_commands import command as slash_command
 from discord.app_commands import describe, locale_str, rename
 from discord.ext.commands import Cog, Context, Group, HelpCommand
@@ -38,6 +39,7 @@ from .ui import HelpCommandView
 if TYPE_CHECKING:
     from collections.abc import Mapping
     from typing import Any, Generator, List, Union
+    from typing_extensions import TypeAlias
 
     from discord import Interaction
     from discord.ui import Button, View
@@ -45,6 +47,8 @@ if TYPE_CHECKING:
     from discord.ext.commands.bot import BotBase
 
     from .ui import ItemId
+
+    AnyCommand: TypeAlias = Union[Command[Any, Any, Any], SlashCommand[Any, Any, Any]]
 
 __all__ = (
     'RichHelpCommand',
@@ -78,7 +82,7 @@ class RichHelpCommand(HelpCommand, Cog):
         super().__init__(command_attrs={'help': 'Show this message'})
         self._last_member = None
         self.current_page: int
-        self.pages: List[List[Command[Any, Any, Any]]]
+        self.pages: List[List[AnyCommand]]
         self.embed_color: Union[Color, int] = embed_color
 
     def _add_to_bot(self, bot: BotBase) -> None:
@@ -133,19 +137,19 @@ class RichHelpCommand(HelpCommand, Cog):
         for idx in range(0, len(base), length):
             yield base[idx:idx + length]
 
-    def get_pages(self, commands: List[Command[Any, Any, Any]]) -> List[List[Command[Any, Any, Any]]]:
+    def get_pages(self, commands: List[AnyCommand]) -> List[List[AnyCommand]]:
         """Split a list of commands to display.
 
         .. versionadded:: 0.1
 
         Parameters
         -----------
-        commands: List[:class:`Command`]
+        commands: List[:class:`AnyCommand`]
             A list of commands
 
         Returns
         --------
-        List[List[:class:`Command`]]
+        List[List[:class:`AnyCommand`]]
         """
         return list(self._split_list(commands, 10))
 
@@ -228,7 +232,7 @@ class RichHelpCommand(HelpCommand, Cog):
 
         return bot_help
 
-    async def send_bot_help(self, mapping: Mapping[Optional[Cog], List[Command]]) -> None:
+    async def send_bot_help(self, mapping: Mapping[Optional[Cog], List[Command[Any, Any, Any]]]) -> None:
         """|coro|
 
         Send a bot help.
@@ -236,7 +240,7 @@ class RichHelpCommand(HelpCommand, Cog):
 
         .. versionadded:: 0.1
         """
-        filtered: List[Command[Any, Any, Any]]
+        filtered: List[AnyCommand]
         if self.is_interaction_based():
             filtered = await self.filter_commands(self.context.bot.tree.get_commands(), sort=True)
 
@@ -273,7 +277,7 @@ class RichHelpCommand(HelpCommand, Cog):
             description=group.help,
             color=self.embed_color
         )
-        filtered: List[Command[Any, Any, Any]] = await self.filter_commands(group.commands, sort=True)
+        filtered: List[AnyCommand] = await self.filter_commands(group.commands, sort=True)
         self.pages = self.get_pages(filtered)
         self.current_page = 1
         length: int = len(self.pages)
@@ -303,7 +307,7 @@ class RichHelpCommand(HelpCommand, Cog):
             color=self.embed_color
         )
         if isinstance(command, Group):
-            filtered: List[Command[Any, Any, Any]] = await self.filter_commands(command.commands, sort=True)
+            filtered: List[AnyCommand] = await self.filter_commands(command.commands, sort=True)
             for child in filtered:
                 cmd_help.add_field(
                     name=f'{prefix}{child.qualified_name} {child.signature}',
@@ -313,12 +317,7 @@ class RichHelpCommand(HelpCommand, Cog):
 
         await self.get_destination().send(embed=cmd_help)
 
-    async def filter_commands(
-            self,
-            commands: List[Command[Any, Any, Any]],
-            *,
-            sort: Optional[bool] = False
-    ) -> List[Command[Any, Any, Any]]:
+    async def filter_commands(self, commands: List[AnyCommand], *, sort: Optional[bool] = False) -> List[AnyCommand]:
         """|coro|
 
         Filter or sort commands.
@@ -330,10 +329,15 @@ class RichHelpCommand(HelpCommand, Cog):
 
         Parameters
         -----------
-        commands: List[:class:`Command`]
+        commands: List[:class:`AnyCommand`]
             A list of commands.
         sort: Optional[:class:`bool`]
             Whether to sort the list of commands.
+
+        Returns
+        --------
+        List[:class:`AnyCommand`]
+            A list of commands.
         """
         try:
             return await super().filter_commands(commands, sort=sort)
@@ -378,7 +382,7 @@ class RichHelpCommand(HelpCommand, Cog):
         """
         return super().command_not_found(string)
 
-    def subcommand_not_found(self, command: Command[Any, Any, Any], string: str) -> str:
+    def subcommand_not_found(self, command: AnyCommand, string: str) -> str:
         """|maybecoro|
 
         Return an error message for when the sub command is not found.
@@ -387,7 +391,7 @@ class RichHelpCommand(HelpCommand, Cog):
 
         Parameters
         -----------
-        command: :class:`Command`
+        command: :class:`AnyCommand`
             A parent command.
         string: :class:`str`
             A sub command which is not found.
