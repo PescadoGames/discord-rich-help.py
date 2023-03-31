@@ -20,6 +20,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - uses: actions/cache@v3
+      with:
+        path: ./.mypy_cache
+        key: mypy-${{ github.sha }}
+        restore-keys: mypy-
     - name: Set up Python 3.8
       uses: actions/setup-python@v4
       with:
@@ -33,6 +38,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - uses: actions/cache@v3
+      with:
+        path: ./.pytest_cache
+        key: pytest-${{ github.sha }}
+        restore-keys: pytest-
     - name: Set up Python 3.8
       uses: actions/setup-python@v4
       with:
