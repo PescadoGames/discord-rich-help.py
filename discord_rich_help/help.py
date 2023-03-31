@@ -25,7 +25,7 @@ SOFTWARE.
 from __future__ import annotations
 
 import asyncio
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, cast
 
 from discord import Color, Embed
 
@@ -453,4 +453,4 @@ class RichHelpCommand(HelpCommand, Cog):
         else:
             param = None
 
-        await self.context.bot.help_command.command_callback(self.context, command=param)
+        await cast(self.context.bot.help_command, HelpCommand).command_callback(self.context, command=param)
