@@ -25,10 +25,9 @@ SOFTWARE.
 from __future__ import annotations
 
 import asyncio
-from typing import Optional, TYPE_CHECKING, cast
+from typing import Optional, TYPE_CHECKING
 
 from discord import Color, Embed
-
 from discord.app_commands import command as slash_command
 from discord.app_commands import describe, locale_str, rename
 from discord.ext.commands import Cog, Context, Group, HelpCommand
