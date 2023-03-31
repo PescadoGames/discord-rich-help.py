@@ -37,7 +37,7 @@ from .ui import HelpCommandView
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
-    from typing import Any, List, Union
+    from typing import Any, Generator, List, Union
 
     from discord import Interaction
     from discord.ui import Button, View
@@ -113,7 +113,7 @@ class RichHelpCommand(HelpCommand, Cog):
         else:
             return False
 
-    def _split_list(self, base: List[Any], length: int) -> List[Any]:
+    def _split_list(self, base: List[Any], length: int) -> Generator[List[Any], None, None]:
         """Split a list.
 
         .. versionadded:: 0.1
