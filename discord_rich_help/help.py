@@ -317,7 +317,12 @@ class RichHelpCommand(HelpCommand, Cog):
 
         await self.get_destination().send(embed=cmd_help)
 
-    async def filter_commands(self, commands: Iterable[AnyCommand], *, sort: Optional[bool] = False) -> List[AnyCommand]:  # type: ignore
+    async def filter_commands(  # type: ignore
+            self,
+            commands: Iterable[AnyCommand],
+            *,
+            sort: Optional[bool] = False
+    ) -> List[AnyCommand]:
         """|coro|
 
         Filter or sort commands.
