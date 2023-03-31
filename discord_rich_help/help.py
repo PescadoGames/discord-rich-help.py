@@ -226,8 +226,8 @@ class RichHelpCommand(HelpCommand, Cog):
         else:
             for command in self.pages[self.current_page - 1]:
                 bot_help.add_field(
-                    name=f'{prefix}{command.name} {command.signature}',
-                    value=command.short_doc,
+                        name=f'{prefix}{command.name} {command.signature}',  # type: ignore
+                        value=command.short_doc,  # type: ignore
                     inline=False
                 )
 
@@ -243,7 +243,7 @@ class RichHelpCommand(HelpCommand, Cog):
         """
         filtered: List[AnyCommand]
         if self.is_interaction_based():
-            filtered = await self.filter_commands(self.context.bot.tree.get_commands(), sort=True)
+            filtered = await self.filter_commands(self.context.bot.tree.get_commands(), sort=True)  # type: ignore
 
         else:
             filtered = await self.filter_commands(self.context.bot.commands, sort=True)
@@ -286,7 +286,7 @@ class RichHelpCommand(HelpCommand, Cog):
         for child in self.pages[0]:
             group_help.add_field(
                 name=f'{prefix}{child.qualified_name} {group.signature}',
-                value=child.short_doc,
+                value=child.short_doc,  # type: ignore
                 inline=False
             )
 
@@ -303,22 +303,22 @@ class RichHelpCommand(HelpCommand, Cog):
         """
         prefix: Optional[str] = self.context.prefix
         cmd_help: Embed = Embed(
-            title=f'{prefix}{command.qualified_name} {command.signature}',
-            description=command.help,
+                title=f'{prefix}{command.qualified_name} {command.signature}',  # type: ignore
+                description=command.help,  # type: ignore
             color=self.embed_color
         )
         if isinstance(command, Group):
             filtered: List[AnyCommand] = await self.filter_commands(command.commands, sort=True)
             for child in filtered:
                 cmd_help.add_field(
-                    name=f'{prefix}{child.qualified_name} {child.signature}',
-                    value=child.short_doc,
+                        name=f'{prefix}{child.qualified_name} {child.signature}',  # type: ignore
+                        value=child.short_doc,  # type: ignore
                     inline=False
                 )
 
         await self.get_destination().send(embed=cmd_help)
 
-    async def filter_commands(self, commands: Iterable[AnyCommand], *, sort: Optional[bool] = False) -> List[AnyCommand]:
+    async def filter_commands(self, commands: Iterable[AnyCommand], *, sort: Optional[bool] = False) -> List[AnyCommand]: # type: ignore
         """|coro|
 
         Filter or sort commands.
@@ -341,7 +341,7 @@ class RichHelpCommand(HelpCommand, Cog):
             A list of commands.
         """
         try:
-            return await super().filter_commands(commands, sort=sort)
+            return await super().filter_commands(commands, sort=sort)  # type: ignore
 
         except Exception:
             if sort:
@@ -349,9 +349,9 @@ class RichHelpCommand(HelpCommand, Cog):
                 return [i[1] for i in sorted(dic.items())]
 
             else:
-                return commands
+                return commands  # type: ignore
 
-    def get_destination(self) -> Context[Any]:
+    def get_destination(self) -> Context[Any]:  # type: ignore
         """Return `.context` .
 
         This is implemented only for compatibility.
@@ -402,7 +402,7 @@ class RichHelpCommand(HelpCommand, Cog):
         :class:`str`
             An error message.
         """
-        return super().subcommand_not_found(command, string)
+        return super().subcommand_not_found(command, string)  # type: ignore
 
     async def send_error_message(self, error: str) -> None:
         """|coro|
@@ -419,7 +419,7 @@ class RichHelpCommand(HelpCommand, Cog):
         err: Embed = Embed(title=error, color=Color.red())
         await self.get_destination().send(embed=err)
 
-    @slash_command(name='help', description=locale_str(text['default_help_doc']))
+    @slash_command(name='help', description=locale_str(text['default_help_doc']))  # type: ignore
     @describe(
         cmd=locale_str(text['cmd_doc']),
         subcmd=locale_str(text['subcmd_doc'])
