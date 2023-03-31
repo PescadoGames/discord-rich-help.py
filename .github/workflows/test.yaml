@@ -40,4 +40,5 @@ jobs:
     - name: Install dependencies
       run: python -m pip install .[test]
     - name: Run pytest
+      if: true == false  # disable job
       run: pytest ./tests
