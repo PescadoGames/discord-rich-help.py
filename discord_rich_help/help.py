@@ -453,4 +453,4 @@ class RichHelpCommand(HelpCommand, Cog):
         else:
             param = None
 
-        await cast(self.context.bot.help_command, HelpCommand).command_callback(self.context, command=param)
+        await self.command_callback(self.context, command=param)
