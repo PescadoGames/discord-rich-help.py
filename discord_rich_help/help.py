@@ -38,7 +38,7 @@ from .ui import HelpCommandView
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
-    from typing import Any, Generator, List, Union
+    from typing import Any, Generator, Iterable, List, Union
     from typing_extensions import TypeAlias
 
     from discord import Interaction
@@ -49,7 +49,7 @@ if TYPE_CHECKING:
 
     from .ui import ItemId
 
-    AnyCommand: TypeAlias = Union[Command[Any, Any, Any], SlashCommand[Any, Any, Any]]
+    AnyCommand: TypeAlias = Union[Command[Any, ..., Any], SlashCommand[Any, ..., Any]]
 
 __all__ = (
     'RichHelpCommand',
@@ -318,7 +318,7 @@ class RichHelpCommand(HelpCommand, Cog):
 
         await self.get_destination().send(embed=cmd_help)
 
-    async def filter_commands(self, commands: List[AnyCommand], *, sort: Optional[bool] = False) -> List[AnyCommand]:
+    async def filter_commands(self, commands: Iterable[AnyCommand], *, sort: Optional[bool] = False) -> List[AnyCommand]:
         """|coro|
 
         Filter or sort commands.
