@@ -28,7 +28,7 @@ __title__ = 'discord_rich_help'
 __author__ = 'PescadoGames'
 __license__ = 'MIT'
 __copyright__ = 'Copyright (c) 2023 PescadoGames'
-__version__ = '0.1.0-beta'
+__version__ = '0.1.0-rc'
 
 from typing import Literal, NamedTuple
 
@@ -43,6 +43,6 @@ class VersionInfo(NamedTuple):
     serial: int
 
 
-version_info: VersionInfo = VersionInfo(major=0, minor=1, micro=0, releaseLevel='beta', serial=0)
+version_info: VersionInfo = VersionInfo(major=0, minor=1, micro=0, releaseLevel='candidate', serial=0)
 
 del NamedTuple, Literal, VersionInfo
