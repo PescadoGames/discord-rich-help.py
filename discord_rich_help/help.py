@@ -265,7 +265,7 @@ class RichHelpCommand(HelpCommand, Cog):
         """
         await self.send_error_message(self.command_not_found(cog.qualified_name))
 
-    async def send_group_help(self, group: Group) -> None:
+    async def send_group_help(self, group: Group[Any, Any, Any]) -> None:
         """|coro|
 
         Send a group help message.
