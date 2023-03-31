@@ -57,6 +57,7 @@ test = [
     "pytest",
     "pytest-mock",
 ]
+build = ["discord-py"]
 
 [build-system]
 requires = ["poetry-core"]
