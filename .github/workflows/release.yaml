@@ -21,6 +21,6 @@ jobs:
     - name: Register token
       env:
         PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-      run: poetry config pypi-token.pypi ${{ process.env.PYPI_TOKEN }}
+      run: poetry config pypi-token.pypi ${{ env.PYPI_TOKEN }}
     - name: Release to PyPI
       run: poetry publish --build
