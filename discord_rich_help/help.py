@@ -42,6 +42,7 @@ if TYPE_CHECKING:
     from typing_extensions import TypeAlias
 
     from discord import Interaction
+    from discord.app_commands import Command as SlashCommand
     from discord.ui import Button, View
     from discord.ext.commands import Command
     from discord.ext.commands.bot import BotBase
