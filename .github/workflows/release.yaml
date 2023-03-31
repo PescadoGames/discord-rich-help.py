@@ -2,8 +2,6 @@ name: Release
 
 on:
   push:
-    branches:
-      - 'release/**'
     tags:
       - 'v*'
 
@@ -23,4 +21,5 @@ jobs:
         PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
       run: poetry config pypi-token.pypi ${{ env.PYPI_TOKEN }}
     - name: Release to PyPI
+      if: startsWith(${{ github.ref_name }}, 'release/')
       run: poetry publish --build
