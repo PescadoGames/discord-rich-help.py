@@ -225,8 +225,8 @@ class RichHelpCommand(HelpCommand, Cog):
         else:
             for command in self.pages[self.current_page - 1]:
                 bot_help.add_field(
-                        name=f'{prefix}{command.name} {command.signature}',  # type: ignore
-                        value=command.short_doc,  # type: ignore
+                    name=f'{prefix}{command.name} {command.signature}',  # type: ignore
+                    value=command.short_doc,  # type: ignore
                     inline=False
                 )
 
@@ -302,22 +302,22 @@ class RichHelpCommand(HelpCommand, Cog):
         """
         prefix: Optional[str] = self.context.prefix
         cmd_help: Embed = Embed(
-                title=f'{prefix}{command.qualified_name} {command.signature}',  # type: ignore
-                description=command.help,  # type: ignore
+            title=f'{prefix}{command.qualified_name} {command.signature}',  # type: ignore
+            description=command.help,  # type: ignore
             color=self.embed_color
         )
         if isinstance(command, Group):
             filtered: List[AnyCommand] = await self.filter_commands(command.commands, sort=True)
             for child in filtered:
                 cmd_help.add_field(
-                        name=f'{prefix}{child.qualified_name} {child.signature}',  # type: ignore
-                        value=child.short_doc,  # type: ignore
+                    name=f'{prefix}{child.qualified_name} {child.signature}',  # type: ignore
+                    value=child.short_doc,  # type: ignore
                     inline=False
                 )
 
         await self.get_destination().send(embed=cmd_help)
 
-    async def filter_commands(self, commands: Iterable[AnyCommand], *, sort: Optional[bool] = False) -> List[AnyCommand]: # type: ignore
+    async def filter_commands(self, commands: Iterable[AnyCommand], *, sort: Optional[bool] = False) -> List[AnyCommand]:  # type: ignore
         """|coro|
 
         Filter or sort commands.
