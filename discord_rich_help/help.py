@@ -294,7 +294,7 @@ class RichHelpCommand(HelpCommand, Cog):
 
         view.message = await self.get_destination().send(embed=group_help, view=view)
 
-    async def send_command_help(self, command: Command) -> None:
+    async def send_command_help(self, command: AnyCommand) -> None:
         """|coro|
 
         Send a command help message.
