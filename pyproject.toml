@@ -1,67 +1,73 @@
-[tool.poetry]
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
 name = "discord-rich-help.py"
-version = "0.1.0-rc"
+authors = [
+    {name = "PescadoGames", email = "official@pescadogames.com"},
+]
+maintainers = [
+    {name = "Awayume", email = "dev@awayume.jp"},
+]
 description = "The extension which make a rich-help command for discord.py"
-license = "MIT"
-authors = ["PescadoGames <official@pescadogames.com>"]
-maintainers = ["Awayume <dev@awayume.jp>"]
 readme = "README.rst"
-repository = "https://github.com/PescadoGames/discord-rich-help.py"
-documentation = "https://github.com/PescadoGames/discord-rich-help.py/wiki"
+requires-python = ">=3.8"
 keywords = ["discord", "discord.py"]
+license = {text = "MIT License"}
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
     "Environment :: Plugins",
     "Natural Language :: English",
     "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Topic :: Internet",
     "Topic :: Software Development :: Libraries",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Utilities",
     "Typing :: Typed",
 ]
-packages = [{include = "discord_rich_help"}]
+dependencies = []
+dynamic = ["version"]
 
-[tool.poetry.urls]
+[project.optional-dependencies]
+test = [
+    "discord.py>=2.2.2,<3.0.0",
+    "flake8>=6.0.0,<7.0.0",
+    "flake8-deprecated>=2.0.0,<3.0.0",
+    "flake8-docstrings>=1.7.0,<2.0.0",
+    "flake8-import-order>=0.18.2,<0.19.0",
+    "flake8-print>=5.0.0,<6.0.0",
+    "flake8-quotes>=3.3.2,<4.0.0",
+    "pyproject-flake8>=6.0.0,<7.0.0",
+    "mypy>=1.1.1,<2.0.0",
+    "typing-extensions>=4.5.0,<5.0.0",
+    "pytest>=7.2.2,<8.0.0",
+    "pytest-mock>=3.10.0,<4.0.0",
+]
+build = [
+    "discord.py>=2.2.2,<3.0.0",
+]
+
+[project.urls]
+Repository = "https://github.com/PescadoGames/discord-rich-help.py"
+Documentation = "https://github.com/PescadoGames/discord-rich-help.py/wiki"
 "Bug Tracker" = "https://github.com/PescadoGames/discord_rich_help.py/issues"
 
-[tool.poetry.dependencies]
-python = "^3.8.1"
+[tool.setuptools.packages.find]
+include = ["discord_rich_help"]
 
-discord-py = { version = "^2.2.2", optional = true }
-flake8 = { version = "^6.0.0", optional = true }
-flake8-deprecated = { version = "^2.0.1", optional = true }
-flake8-docstrings = { version = "^1.7.0", optional = true }
-flake8-import-order = { version = "^0.18.2", optional = true }
-flake8-print = { version = "^5.0.0", optional = true }
-flake8-quotes = { version = "^3.3.2", optional = true }
-pyproject-flake8 = { version = "^6.0.0", optional = true }
-mypy = { version = "^1.1.1", optional = true }
-mypy-extensions = { version = "^1.0.0", optional = true }
-pytest = { version = "^7.2.2", optional = true }
-pytest-mock = { version = "^3.10.0", optional = true }
+[tool.setuptools.dynamic]
+version = {attr = "discord_rich_help.__version__"}
 
-[tool.poetry.extras]
-test = [
-    "discord-py",
-    "flake8",
-    "flake8-deprecated",
-    "flake8-docstrings",
-    "flake8-import-order",
-    "flake8-print",
-    "flake8-quotes",
-    "pyproject-flake8",
-    "mypy",
-    "mypy-extensions",
-    "pytest",
-    "pytest-mock",
-]
-build = ["discord-py"]
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+#[tool.setuptools_scm]
+#write_to = "discord_rich_help/_version.py"
 
 [tool.flake8]
 max-line-length = 125

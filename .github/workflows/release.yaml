@@ -15,11 +15,11 @@ jobs:
       with:
         python-version: 3.8.x
     - name: Install dependencies
-      run: python -m pip install poetry
-    - name: Register token
-      env:
-        PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-      run: poetry config pypi-token.pypi ${{ env.PYPI_TOKEN }}
+      run: python -m pip install twine build
     - name: Release to PyPI
       if: startsWith(${{ github.ref_name }}, 'release/')
-      run: poetry publish --build
+      env:
+        PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+      run: |
+        python -m build
+        twine upload -u "__token__" -p ${{ env.PYPI_TOKEN }} dist/*

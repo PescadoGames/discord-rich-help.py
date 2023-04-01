@@ -18,7 +18,7 @@ Key Features
 Installing
 -----------
 
-**Python 3.8.1 or higher is required**
+**Python 3.8 or higher is required**
 
 .. code:: sh
 
