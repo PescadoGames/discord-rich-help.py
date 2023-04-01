@@ -8,7 +8,7 @@ discord-rich-help.py
    :target: https://pypi.python.org/pypi/discord-rich-help.py
    :alt: PyPI supported Python versions
 
-The extension which make a rich-help command for discord.py
+The extension which makes a rich-help command for discord.py
 
 Key Features
 -------------
