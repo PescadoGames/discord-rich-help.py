@@ -1,6 +1,19 @@
 name: Test
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - 'pyproject.toml'
+      - 'discord_rich_help/**'
+      - 'tests/**'
+
+  pull_request:
+    paths:
+      - 'pyproject.toml'
+      - 'discord_rich_help/**'
+      - 'tests/**'
+
+  workflow_dispatch:
 
 jobs:
   flake8:
