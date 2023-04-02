@@ -1,0 +1,11 @@
+name: Feature Request
+description:
+labels: ["enhancement"]
+title: "[Feat]: "
+body:
+  - type: textarea
+    attributes:
+      label: Request Details
+      description: Please be specific.
+    validations:
+      required: true
