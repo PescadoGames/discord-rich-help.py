@@ -11,7 +11,7 @@ authors = [
 maintainers = [
     {name = "Awayume", email = "dev@awayume.jp"},
 ]
-description = "The extension which makes a rich-help command for discord.py"
+description = "An extension which makes a rich-help command for discord.py"
 readme = "README.rst"
 requires-python = ">=3.8"
 keywords = ["discord", "discord.py"]

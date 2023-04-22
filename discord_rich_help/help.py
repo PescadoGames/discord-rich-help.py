@@ -258,11 +258,11 @@ class RichHelpCommand(HelpCommand, Cog):
     async def send_cog_help(self, cog: Cog) -> None:
         """|coro|
 
-        This will send "Command not found" error message.
+        This function is not implemented yet.
 
         .. versionadded:: 0.1
         """
-        await self.send_error_message(self.command_not_found(cog.qualified_name))
+        raise NotImplementedError('This function is not implemented yet.')
 
     async def send_group_help(self, group: Group[Any, Any, Any]) -> None:
         """|coro|
