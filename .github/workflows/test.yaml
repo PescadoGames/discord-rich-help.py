@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python 3.8
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: 3.8.x
     - name: Install dependencies
@@ -39,7 +39,7 @@ jobs:
         key: mypy-${{ github.sha }}
         restore-keys: mypy-
     - name: Set up Python 3.8
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: 3.8.x
     - name: Install dependencies
@@ -57,7 +57,7 @@ jobs:
         key: pytest-${{ github.sha }}
         restore-keys: pytest-
     - name: Set up Python 3.8
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: 3.8.x
     - name: Install dependencies
