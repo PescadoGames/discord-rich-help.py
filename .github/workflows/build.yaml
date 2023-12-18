@@ -23,7 +23,7 @@ jobs:
         echo "version=$(python -c 'import discord_rich_help; print(discord_rich_help.__version__)')" >> $GITHUB_ENV
         echo "commit=$(echo ${{ github.sha }} | cut -c 1-7)" >> $GITHUB_ENV
     - name: Archive artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: discord-rich-help.py_${{ env.version }}@${{ env.commit}}
         path: dist/*
